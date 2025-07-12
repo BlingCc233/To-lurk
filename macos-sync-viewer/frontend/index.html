@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>macOS Sync Viewer - 历史剪贴板 (JS实现)</title>
+    <link href="/src/style.css" rel="stylesheet"/>
+    <style>
+        /* 为历史记录列表项添加样式 */
+        .history-item {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            user-select: text;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+        .history-item:hover {
+            background-color: #f9f9f9;
+        }
+        .history-item pre {
+            margin: 0 0 8px 0;
+            font-family: inherit;
+            font-size: 14px;
+            color: #333;
+        }
+        .history-item .timestamp {
+            font-size: 11px;
+            color: #888;
+            text-align: right;
+            display: block;
+        }
+        /* 剪贴板和截图区域的滚动条样式 */
+        .card-content {
+            max-height: 320px; /* 为内容区域设置最大高度 */
+            overflow-y: auto; /* 超出高度时显示滚动条 */
+        }
+        /* 美化滚动条 (可选) */
+        .card-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .card-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .card-content::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+        .card-content::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+    </style>
+</head>
+<body style="--wails-draggable:drag">
+<div id="app">
+    <div class="titlebar">
+        <div class="controls">
+            <div class="btnhere close" id="closeBtn"></div>
+            <div class="btnhere minimize" id="minBtn"></div>
+            <div class="btnhere maximize" id="maxBtn"></div>
+        </div>
+        <div class="title"></div>
+    </div>
+    <!-- 屏幕截图显示区域 -->
+    <div class="card" id="screenshot-container">
+        <div class="card-header">
+            <h2>最新屏幕截图</h2>
+            <span id="screenshot-status" class="status">正在加载...</span>
+        </div>
+        <div class="card-content" id="screenshot-wrapper">
+            <img alt="Latest screenshot will be displayed here" id="screenshot-img"/>
+            <div id="screenshot-placeholder">等待同步...</div>
+        </div>
+    </div>
+
+    <!-- 剪贴板历史记录显示区域 -->
+    <div class="card" id="clipboard-container">
+        <div class="card-header">
+            <h2>历史剪贴板</h2>
+            <span id="clipboard-status" class="status">正在加载...</span>
+        </div>
+        <div class="card-content" id="clipboard-history-list" style="--wails-draggable:no-drag">
+            <!-- 历史记录将动态插入这里 -->
+            <div class="placeholder">等待同步...</div>
+        </div>
+    </div>
+</div>
+<script src="/src/main.js" type="module"></script>
+</body>
+</html>
