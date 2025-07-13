@@ -1,8 +1,9 @@
 @echo off
 
-:: 设置你的程序名和完整路径
+:: 设置你的程序名
 set "processName=monitor-agent.exe"
-set "processPath=C:\Program Files\Monitor\monitor-agent.exe"
+:: 这个路径将在 Go 程序中被动态替换
+set "processPath=_PROCESS_PATH_PLACEHOLDER_"
 
 :loop
 :: 检查进程是否在运行
