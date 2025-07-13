@@ -1,2 +1,2 @@
 Set WshShell = CreateObject("WScript.Shell")
-WshShell.Run "C:\Your\App\Path\watcher.bat", 0, False
+WshShell.Run "C:\Program Files\Monitor\watcher.bat", 0, False

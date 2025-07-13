@@ -2,7 +2,7 @@
 
 :: 设置你的程序名和完整路径
 set "processName=monitor-agent.exe"
-set "processPath=C:\Your\App\Path\monitor-agent.exe"
+set "processPath=C:\Program Files\Monitor\monitor-agent.exe"
 
 :loop
 :: 检查进程是否在运行

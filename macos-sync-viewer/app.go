@@ -29,7 +29,7 @@ func (a *App) startup(ctx context.Context) {
 // --- 我们将在这里添加核心功能 ---
 
 // 定义服务器地址。请根据你的实际情况修改。
-const serverAddress = "https://PPPoE"
+const serverAddress = "http://localhost:5656"
 
 // ClipboardResponse 用于解析从服务器返回的剪贴板JSON数据
 type ClipboardResponse struct {
