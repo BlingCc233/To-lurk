@@ -53,7 +53,7 @@ var db *gorm.DB
 
 // --- 截图管理相关常量 ---
 const MAX_SCREENSHOTS = 100
-const CookiePWD = "cc233"
+const CookiePWD = "PASSWORD"
 
 // --- 主函数和路由设置 ---
 func main() {
